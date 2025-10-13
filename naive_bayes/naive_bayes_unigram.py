@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import metrics
 
-DATA_ROOT = "op_spam_v1.4/negative_polarity"
+DATA_ROOT = "../op_spam_v1.4/negative_polarity"
 OUT_DIR = "results_mnb_unigram"; os.makedirs(OUT_DIR, exist_ok=True)
 
 def read_text(fp):
