@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np, pandas as pd
 from sklearn.model_selection import StratifiedKFold, GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.feature_selection import SelectKBest, chi2, SelectPercentile
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn import metrics
@@ -34,15 +34,15 @@ y_test  = y[folds==5]
 
 pipe = Pipeline([
     ("vec", CountVectorizer(lowercase=True, stop_words="english", ngram_range=(1,2))), # bigram
-    ("sel", SelectKBest(score_func=chi2, k='all')),
+    ("sel", SelectPercentile(score_func=chi2)),
     ("clf", MultinomialNB())
 ])
 
 param_grid = {
-    "clf__alpha": [0.1, 0.5, 1.0, 2.0], 
+    "vec__min_df": [1, 2, 3],
+    "sel__percentile": [100, 90, 75, 50, 25],
+    "clf__alpha": [0.1, 0.5, 1.0, 2.0],
     "clf__fit_prior": [True, False],
-    "vec__min_df": [1,2],
-    "sel__k": ['all', 2000, 4000, 8000],
 }
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 grid = GridSearchCV(pipe, param_grid, scoring="f1", cv=cv, n_jobs=-1, refit=True, verbose=1)
@@ -55,7 +55,7 @@ y_pred = best.predict(X_test)
 print(metrics.classification_report(y_test, y_pred, target_names=["truthful(0)","deceptive(1)"]))
 print("Confusion matrix:\n", metrics.confusion_matrix(y_test, y_pred))
 
-# Save metrics
+# Simple metrics
 pd.DataFrame({"y_true":y_test, "y_pred":y_pred}).to_csv(os.path.join(OUT_DIR,"predictions_fold5.csv"), index=False)
 pd.DataFrame({
     "metric":["accuracy","precision","recall","f1"],
@@ -64,6 +64,17 @@ pd.DataFrame({
              metrics.recall_score(y_test, y_pred),
              metrics.f1_score(y_test, y_pred)]
 }).to_csv(os.path.join(OUT_DIR,"metrics.csv"), index=False)
+
+# Full metrics
+report = metrics.classification_report(y_test, y_pred, output_dict=True, target_names=["truthful(0)","deceptive(1)"])
+# Each class + macro/micro/weighted + accuracy
+full_metrics = pd.DataFrame(report).T
+full_metrics.to_csv(os.path.join(OUT_DIR, "metrics_full.csv"))
+
+# Confusion matrix
+cm = metrics.confusion_matrix(y_test, y_pred, labels=[0,1])
+pd.DataFrame(cm, index=["true_0","true_1"], columns=["pred_0","pred_1"]).to_csv(os.path.join(OUT_DIR, "confusion_matrix.csv"))
+
 
 # Save top terms
 vec = best.named_steps["vec"]; clf = best.named_steps["clf"]
