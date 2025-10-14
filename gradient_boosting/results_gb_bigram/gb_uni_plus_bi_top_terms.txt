@@ -1,0 +1,50 @@
+chicago	0.142409
+location	0.026862
+luxury	0.018559
+we	0.015393
+is	0.014600
+for	0.013939
+cool	0.013281
+are	0.011538
+there are	0.010793
+smell	0.010684
+seemed	0.010024
+decided	0.009839
+smelled	0.009728
+star	0.009442
+turned	0.009190
+sheets	0.008747
+at the	0.008744
+walk	0.008674
+experience	0.008537
+my	0.008292
+finally	0.008083
+open	0.007896
+this is	0.007701
+the food	0.007697
+make	0.007272
+the	0.006988
+rude	0.006552
+no	0.006533
+very	0.006136
+millennium	0.005986
+conference	0.005898
+construction	0.005609
+with my	0.005484
+was	0.005344
+to chicago	0.005263
+have stayed	0.005235
+room the	0.005233
+this	0.005109
+arrive	0.005073
+many	0.005070
+elevators	0.004982
+recently	0.004908
+coffee	0.004679
+cleanliness	0.004673
+cleaned	0.004574
+to wait	0.004398
+east hotel	0.004325
+talbott hotel	0.004316
+parking valet	0.004187
+comfortable	0.004147

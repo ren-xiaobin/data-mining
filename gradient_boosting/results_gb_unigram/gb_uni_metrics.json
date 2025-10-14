@@ -1,0 +1,22 @@
+{
+  "acc": 0.83125,
+  "f1_macro": 0.8310850439882698,
+  "best_params": {
+    "sel__k": 4000,
+    "gb__n_estimators": 800,
+    "gb__max_depth": 2,
+    "gb__learning_rate": 0.05
+  },
+  "truth": {
+    "precision": 0.8117647058823529,
+    "recall": 0.8625,
+    "f1": 0.8363636363636363,
+    "support": 80
+  },
+  "deceptive": {
+    "precision": 0.8533333333333334,
+    "recall": 0.8,
+    "f1": 0.8258064516129032,
+    "support": 80
+  }
+}
