@@ -167,6 +167,50 @@ def train_and_eval(args):
         columns=["metric", "value"],
     ).to_csv(out_dir / "metrics.csv", index=False, encoding="utf-8")
 
+    # ----- RF hyperparameters for the report (number of trees + mtry) -----
+    rf: RandomForestClassifier = best.named_steps["rf"]
+    sel: SelectPercentile = best.named_steps["sel"]
+
+    n_feat = int(getattr(rf, "n_features_in_", len(getattr(sel, "get_support", lambda **_: [])(indices=True))))
+
+    max_feat_param = rf.max_features
+    if isinstance(max_feat_param, str):
+        if max_feat_param == "sqrt":
+            mtry = int(np.sqrt(n_feat))
+        elif max_feat_param == "log2":
+            mtry = int(np.log2(n_feat))
+        else:
+            mtry = n_feat
+    elif isinstance(max_feat_param, float):
+        if 0.0 < max_feat_param <= 1.0:
+            mtry = int(np.ceil(max_feat_param * n_feat))
+        else:
+            mtry = int(max_feat_param)
+    elif isinstance(max_feat_param, (int, np.integer)) and max_feat_param > 0:
+        mtry = int(max_feat_param)
+    elif max_feat_param is None:
+        mtry = n_feat
+    else:
+        mtry = n_feat
+
+    mtry = max(1, min(n_feat, mtry))
+
+    sel_percentile = getattr(sel, "percentile", None)
+
+    pd.DataFrame(
+        [
+            ("n_trees", rf.n_estimators),
+            ("max_features_rule", str(rf.max_features)),
+            ("n_features_after_selection", n_feat),
+            ("mtry_count", mtry),
+            ("select_percentile", sel_percentile),
+        ],
+        columns=["param", "value"],
+    ).to_csv(out_dir / "rf_params.csv", index=False, encoding="utf-8")
+
+    print(f"[RF] n_trees={rf.n_estimators} | max_features_rule={rf.max_features} "
+          f"| n_features_after_selection={n_feat} | mtry_count={mtry} | select_percentile={sel_percentile}")
+
     # ----- metrics_full.csv -----
     rep = metrics.classification_report(
         y_te,

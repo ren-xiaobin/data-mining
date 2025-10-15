@@ -1,0 +1,6 @@
+param,value
+n_trees,800
+max_features_rule,log2
+n_features_after_selection,5945
+mtry_count,12
+select_percentile,90
