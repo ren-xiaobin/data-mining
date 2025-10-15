@@ -1,0 +1,22 @@
+{
+  "best_params": {
+    "clf__ccp_alpha": 0.0,
+    "clf__criterion": "entropy",
+    "clf__max_depth": 10,
+    "clf__min_samples_leaf": 10,
+    "clf__min_samples_split": 2
+  },
+  "best_cv_f1_macro": 0.695495,
+  "preset": "bi_std",
+  "ngrams": "uni+bi",
+  "mode": "std",
+  "seed": 42,
+  "cv_splits": 5,
+  "train_time_sec": 63.711,
+  "data_root": "C:\\pythonProject\\data-mining\\op_spam_v1.4",
+  "polarity": "negative_only",
+  "label_mapping": {
+    "truthful": 0,
+    "deceptive": 1
+  }
+}

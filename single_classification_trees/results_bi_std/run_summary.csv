@@ -1,0 +1,2 @@
+model,preset,ngrams,mode,cv_f1_macro,test_accuracy,test_precision_macro,test_recall_macro,test_f1_macro,best_params,train_time_sec,out_dir,timestamp,polarity,label_mapping
+DecisionTree,bi_std,uni+bi,std,0.695495,0.5625,0.563492,0.5625,0.560784,"{""clf__ccp_alpha"": 0.0, ""clf__criterion"": ""entropy"", ""clf__max_depth"": 10, ""clf__min_samples_leaf"": 10, ""clf__min_samples_split"": 2}",63.711,C:\pythonProject\data-mining\single_classification_trees\results_bi_std,2025-10-15T21:51:38,negative_only,"truthful=0, deceptive=1"
