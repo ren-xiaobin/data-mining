@@ -1,0 +1,50 @@
+chicago	imp=0.142409	delta=0.443213	score=0.063118
+luxury	imp=0.018559	delta=0.324998	score=0.006032
+smelled	imp=0.009728	delta=0.457617	score=0.004452
+cool	imp=0.013281	delta=0.267824	score=0.003557
+turned	imp=0.009190	delta=0.386341	score=0.003551
+the	imp=0.006988	delta=0.447741	score=0.003129
+at the	imp=0.008744	delta=0.238145	score=0.002082
+my	imp=0.008292	delta=0.244339	score=0.002026
+decided	imp=0.009839	delta=0.190887	score=0.001878
+with my	imp=0.005484	delta=0.338446	score=0.001856
+chicago hotel	imp=0.003694	delta=0.461419	score=0.001704
+seemed	imp=0.010024	delta=0.163613	score=0.001640
+recently	imp=0.004908	delta=0.331663	score=0.001628
+cleanliness	imp=0.004673	delta=0.314823	score=0.001471
+rude	imp=0.006552	delta=0.221401	score=0.001451
+the food	imp=0.007697	delta=0.183853	score=0.001415
+cleaned	imp=0.004574	delta=0.284761	score=0.001303
+sheets	imp=0.008747	delta=0.132992	score=0.001163
+experience	imp=0.008537	delta=0.135502	score=0.001157
+make	imp=0.007272	delta=0.156462	score=0.001138
+to wait	imp=0.004398	delta=0.253167	score=0.001113
+smaller than	imp=0.002560	delta=0.402751	score=0.001031
+smell	imp=0.010684	delta=0.073843	score=0.000789
+vacation	imp=0.001912	delta=0.409991	score=0.000784
+was	imp=0.005344	delta=0.137373	score=0.000734
+to this	imp=0.003342	delta=0.218529	score=0.000730
+towels and	imp=0.001270	delta=0.547525	score=0.000696
+found	imp=0.003039	delta=0.228557	score=0.000695
+the sheets	imp=0.003192	delta=0.214525	score=0.000685
+terrible	imp=0.002156	delta=0.316411	score=0.000682
+my room	imp=0.002934	delta=0.222152	score=0.000652
+to chicago	imp=0.005263	delta=0.123606	score=0.000651
+it seemed	imp=0.001711	delta=0.368434	score=0.000630
+properly and	imp=0.001213	delta=0.517665	score=0.000628
+was not	imp=0.003810	delta=0.160091	score=0.000610
+basic	imp=0.001047	delta=0.554916	score=0.000581
+website	imp=0.003005	delta=0.190146	score=0.000571
+and	imp=0.003012	delta=0.183195	score=0.000552
+the chicago	imp=0.001742	delta=0.312527	score=0.000545
+prices	imp=0.003358	delta=0.162044	score=0.000544
+was rude	imp=0.001760	delta=0.284562	score=0.000501
+not	imp=0.003459	delta=0.144079	score=0.000498
+location in	imp=0.001250	delta=0.377597	score=0.000472
+at	imp=0.002077	delta=0.220640	score=0.000458
+new room	imp=0.001717	delta=0.266793	score=0.000458
+my first	imp=0.002440	delta=0.183857	score=0.000449
+eggs	imp=0.000791	delta=0.547525	score=0.000433
+within	imp=0.003712	delta=0.105534	score=0.000392
+place to	imp=0.001826	delta=0.209991	score=0.000383
+looked	imp=0.001797	delta=0.210529	score=0.000378

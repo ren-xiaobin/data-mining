@@ -99,15 +99,60 @@ def save_run(tag, res, vec):
     pd.DataFrame({'y_true': y_test, 'y_pred': res['pred'], 'p_deceptive': res['proba']}).to_csv(
         f'gb_{tag}_predictions.csv', index=False)
 
-    # top terms
-    sel   = res['model'].named_steps['sel']
-    gb    = res['model'].named_steps['gb']
-    idx   = sel.get_support(indices=True)
-    terms = vec.get_feature_names_out()[idx]
-    order = np.argsort(gb.feature_importances_)[::-1][:50]
-    with open(f'gb_{tag}_top_terms.txt','w') as f:
-        for i in order:
-            f.write(f"{terms[i]}\t{gb.feature_importances_[i]:.6f}\n")
+    # ---------- Directional top terms (truthful vs deceptive) ----------
+    sel = res['model'].named_steps['sel']
+    gb  = res['model'].named_steps['gb']
+    kept_idx = sel.get_support(indices=True)
+
+    # terms kept by chi2 selection
+    vocab = vec.get_feature_names_out()
+    terms = vocab[kept_idx]
+    imps  = gb.feature_importances_
+
+    # Build selected test matrix to estimate direction on fold 5
+    X_test_vec = vec.transform(test_df.text)
+    X_test_sel = sel.transform(X_test_vec)
+    if not sparse.issparse(X_test_sel):
+        from scipy import sparse as sp
+        X_test_sel = sp.csr_matrix(X_test_sel)
+
+    # Binary presence matrix
+    Xbin = X_test_sel.copy()
+    Xbin.data[:] = 1
+
+    P = res['proba']  # predicted P(deceptive) on fold 5, shape (N,)
+    N = Xbin.shape[0]
+
+    # Vectorized means: mean(p | present) - mean(p | absent)
+    present_count = np.asarray(Xbin.sum(axis=0)).ravel()
+    present_sum   = np.asarray(Xbin.T.dot(P)).ravel()
+    total_sum     = float(P.sum())
+    absent_count  = N - present_count
+    absent_sum    = total_sum - present_sum
+
+    with np.errstate(divide='ignore', invalid='ignore'):
+        mean_present = np.divide(present_sum, present_count, out=np.zeros_like(present_sum, dtype=float), where=present_count>0)
+        mean_absent  = np.divide(absent_sum,  absent_count,  out=np.zeros_like(absent_sum,  dtype=float), where=absent_count>0)
+        delta = mean_present - mean_absent  # >0 => feature presence raises P(deceptive)
+
+    # Class-specific scores
+    score_decep = imps * np.maximum(delta, 0.0)
+    score_truth = imps * np.maximum(-delta, 0.0)
+
+    topk = 50  # change if you want fewer/more
+    decep_idx = np.argsort(score_decep)[-topk:][::-1]
+    truth_idx = np.argsort(score_truth)[-topk:][::-1]
+
+    with open(f'gb_{tag}_top_terms_deceptive.txt','w') as f:
+        for i in decep_idx:
+            if score_decep[i] <= 0: continue
+            f.write(f"{terms[i]}\timp={imps[i]:.6f}\tdelta={delta[i]:.6f}\tscore={score_decep[i]:.6f}\n")
+
+    with open(f'gb_{tag}_top_terms_truthful.txt','w') as f:
+        for i in truth_idx:
+            if score_truth[i] <= 0: continue
+            # note: report positive delta-for-truth as -delta (magnitude toward truth)
+            f.write(f"{terms[i]}\timp={imps[i]:.6f}\tdelta={-delta[i]:.6f}\tscore={score_truth[i]:.6f}\n")
 
 # UNI (fixed)
 res_uni = fit_eval_gb_fixed(X_train_uni, X_test_uni, y_train, y_test, UNI_PARAMS)
