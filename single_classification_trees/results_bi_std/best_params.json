@@ -17,7 +17,7 @@
   "cv_splits": 5,
   "grid_size_est": 2016,
   "fits_evaluated_est": 10080,
-  "train_time_sec": 439.851,
+  "train_time_sec": 447.015,
   "data_root": "C:\\pythonProject\\data-mining\\op_spam_v1.4",
   "polarity": "negative_only",
   "label_mapping": {

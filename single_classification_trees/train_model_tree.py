@@ -192,7 +192,33 @@ def main():
     metrics = save_metrics_summary(y_test, y_pred, out_dir)
     save_metrics_full(y_test, y_pred, out_dir)
     save_predictions(y_test, y_pred, out_dir)
-    extract_top_terms(best_pipe, top_k=50).to_csv(out_dir / "top_features.csv", index=False)
+    # ----- top terms per class (two-column CSV like: top_deceptive_terms, top_truthful_terms) -----
+    tfidf: TfidfVectorizer = best_pipe.named_steps["tfidf"]
+    terms = np.array(tfidf.get_feature_names_out())
+
+    Xtr_tfidf = tfidf.transform(X_train)
+    Xtr_bin = (Xtr_tfidf > 0).astype(int)
+
+    idx_tru = np.where(y_train == 0)[0]
+    idx_dec = np.where(y_train == 1)[0]
+    p_truth = np.asarray(Xtr_bin[idx_tru].mean(axis=0)).ravel()
+    p_decep = np.asarray(Xtr_bin[idx_dec].mean(axis=0)).ravel()
+
+    dec_rank = np.argsort(-(p_decep - p_truth))
+    tru_rank = np.argsort(-(p_truth - p_decep))
+
+    top_k = 50
+    dec_terms = terms[dec_rank][:top_k]
+    tru_terms = terms[tru_rank][:top_k]
+
+    L = max(len(dec_terms), len(tru_terms))
+    dec_terms = list(dec_terms) + [""] * (L - len(dec_terms))
+    tru_terms = list(tru_terms) + [""] * (L - len(tru_terms))
+
+    pd.DataFrame(
+        {"top_deceptive_terms": dec_terms, "top_truthful_terms": tru_terms}
+    ).to_csv(out_dir / "top_features.csv", index=False)
+
     save_params_csv(best_params, out_dir)
 
     # keep json + run_summary
