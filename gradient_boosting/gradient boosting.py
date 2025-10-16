@@ -56,9 +56,9 @@ def run_gb(Xtr, Xte, ytr, yte):
     ])
     grid = {
         'sel__k': [2000, 4000, 'all'],
-        'gb__n_estimators': [400, 800],
-        'gb__learning_rate': [0.01, 0.05],
-        'gb__max_depth': [2, 3],
+        'gb__n_estimators': [200, 400, 800],
+        'gb__learning_rate': [0.05, 0.08,0.1],
+        'gb__max_depth': [2, 3, 4],
     }
     rs = RandomizedSearchCV(pipe, grid, n_iter=12, scoring='f1', cv=5, n_jobs=-1, random_state=0).fit(Xtr, ytr)
     pred = rs.predict(Xte)
