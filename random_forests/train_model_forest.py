@@ -2,14 +2,8 @@
 --------------------------------------------------------------
 How to run (choose ONE of the four presets)
 --------------------------------------------------------------
-# Unigram (fast)
-python random_forests/train_model_forest.py --preset uni_fast
-
 # Unigram (standard)
 python random_forests/train_model_forest.py --preset uni_std
-
-# Bigram (fast)
-python random_forests/train_model_forest.py --preset bi_fast
 
 # Bigram (standard)
 python random_forests/train_model_forest.py --preset bi_std
