@@ -1,2 +1,0 @@
-model,preset,ngrams,mode,cv_f1_macro,test_accuracy,test_precision_macro,test_recall_macro,test_f1_macro,best_params,train_time_sec,out_dir,timestamp,polarity,label_mapping
-DecisionTree,bi_fast,uni+bi,fast,0.645253,0.6875,0.687617,0.6875,0.687451,"{""clf__ccp_alpha"": 0.0, ""clf__criterion"": ""gini"", ""clf__max_depth"": 20, ""clf__min_samples_leaf"": 1}",4.568,C:\pythonProject\data-mining\single_classification_trees\results_bi_fast,2025-10-15T21:50:06,negative_only,"truthful=0, deceptive=1"

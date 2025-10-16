@@ -1,6 +1,9 @@
 param,value
 clf__ccp_alpha,0.0
+clf__class_weight,None
 clf__criterion,gini
-clf__max_depth,
+clf__max_depth,None
 clf__min_samples_leaf,10
 clf__min_samples_split,2
+tfidf__binary,False
+tfidf__min_df,2

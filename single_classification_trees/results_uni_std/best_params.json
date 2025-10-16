@@ -1,10 +1,13 @@
 {
   "best_params": {
     "clf__ccp_alpha": 0.0,
+    "clf__class_weight": null,
     "clf__criterion": "gini",
     "clf__max_depth": null,
     "clf__min_samples_leaf": 10,
-    "clf__min_samples_split": 2
+    "clf__min_samples_split": 2,
+    "tfidf__binary": false,
+    "tfidf__min_df": 2
   },
   "best_cv_f1_macro": 0.690662,
   "preset": "uni_std",
@@ -12,7 +15,9 @@
   "mode": "std",
   "seed": 42,
   "cv_splits": 5,
-  "train_time_sec": 38.369,
+  "grid_size_est": 2016,
+  "fits_evaluated_est": 10080,
+  "train_time_sec": 189.408,
   "data_root": "C:\\pythonProject\\data-mining\\op_spam_v1.4",
   "polarity": "negative_only",
   "label_mapping": {

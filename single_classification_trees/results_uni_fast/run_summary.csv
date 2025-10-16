@@ -1,2 +1,0 @@
-model,preset,ngrams,mode,cv_f1_macro,test_accuracy,test_precision_macro,test_recall_macro,test_f1_macro,best_params,train_time_sec,out_dir,timestamp,polarity,label_mapping
-DecisionTree,uni_fast,uni,fast,0.674047,0.68125,0.681505,0.68125,0.681138,"{""clf__ccp_alpha"": 0.0, ""clf__criterion"": ""gini"", ""clf__max_depth"": null, ""clf__min_samples_leaf"": 5}",3.92,C:\pythonProject\data-mining\single_classification_trees\results_uni_fast,2025-10-15T21:47:52,negative_only,"truthful=0, deceptive=1"

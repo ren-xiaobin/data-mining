@@ -1,15 +1,7 @@
-"""
-Run examples (project root):
-  python single_classification_trees/train_model_tree.py --preset uni_fast
-  python single_classification_trees/train_model_tree.py --preset uni_std
-  python single_classification_trees/train_model_tree.py --preset bi_fast
-  python single_classification_trees/train_model_tree.py --preset bi_std
-"""
-
 import argparse
 import json
 from pathlib import Path
-from typing import Iterable, Tuple, Dict
+from typing import Iterable, Tuple, Dict, Any, List
 from datetime import datetime
 import time
 
@@ -100,31 +92,29 @@ def extract_top_terms(pipe: Pipeline, top_k: int = 50) -> pd.DataFrame:
     rows = [{"feature": str(terms[i]), "importance": float(imp[i])} for i in idx if imp[i] > 0]
     return pd.DataFrame(rows)
 
-def save_params_csv(best_params: Dict, out_dir: Path):
-    rows = [{"param": k, "value": v} for k, v in best_params.items()]
+def save_params_csv(best_params: Dict[str, Any], out_dir: Path):
+    def fmt(v: Any) -> str:
+        return "None" if v is None else str(v)
+    rows = [{"param": k, "value": fmt(v)} for k, v in sorted(best_params.items())]
     pd.DataFrame(rows).to_csv(out_dir / "dt_params.csv", index=False)
 
 # ----------------------------- Main ----------------------------- #
 def main():
-    parser = argparse.ArgumentParser(description="Single Classification Tree (NEGATIVE only, RF-style, truthful=0).")
+    parser = argparse.ArgumentParser(description="Single Classification Tree (NEGATIVE only, RF-style, std-only).")
     parser.add_argument("--preset", type=str, required=True,
-                        choices=["uni_fast", "uni_std", "bi_fast", "bi_std"],
-                        help="Choose one of {uni_fast, uni_std, bi_fast, bi_std}.")
+                        choices=["uni_std", "bi_std", "uni", "bi"],
+                        help="Use 'uni_std' or 'bi_std' (aliases: 'uni', 'bi').")
     parser.add_argument("--cv_splits", type=int, default=5)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--n_jobs", type=int, default=-1)
     args = parser.parse_args()
 
-    PRESET = {
-        "uni_fast": ("uni", "fast"),
-        "uni_std":  ("uni", "std"),
-        "bi_fast":  ("uni+bi", "fast"),
-        "bi_std":   ("uni+bi", "std"),
-    }
-    ngrams, mode = PRESET[args.preset]
-    gram_tag = "uni" if ngrams == "uni" else "bi"
-
-    out_dir = Path("single_classification_trees", f"results_{gram_tag}_{mode}")
+    if args.preset in ("uni_std", "uni"):
+        ngrams = "uni"
+        out_dir = Path("single_classification_trees", "results_uni_std")
+    else:
+        ngrams = "uni+bi"
+        out_dir = Path("single_classification_trees", "results_bi_std")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df = load_opspam_negative_only()
@@ -149,22 +139,38 @@ def main():
         ("clf", DecisionTreeClassifier(random_state=args.seed)),
     ])
 
-    # Hyperparam grid from mode
-    if mode == "fast":
-        param_grid = {
-            "clf__criterion": ["gini"],
-            "clf__max_depth": [None, 20],
-            "clf__min_samples_leaf": [1, 5],
-            "clf__ccp_alpha": [0.0, 1e-4],
-        }
-    else:
-        param_grid = {
+    param_grid: List[Dict[str, Any]] = [
+        {
+            "tfidf__min_df": [1, 2],
+            "tfidf__binary": [False, True],
             "clf__criterion": ["gini", "entropy"],
-            "clf__max_depth": [None, 10, 20, 50],
-            "clf__min_samples_split": [2, 5, 10],
-            "clf__min_samples_leaf": [1, 2, 5, 10],
+            "clf__max_depth": [None, 20, 50],
+            "clf__min_samples_split": [2, 5],
+            "clf__min_samples_leaf": [1, 5, 10],
             "clf__ccp_alpha": [0.0, 1e-4, 5e-4, 1e-3],
-        }
+            "clf__class_weight": [None, "balanced"],
+        },
+        {
+            "tfidf__min_df": [3],
+            "tfidf__max_df": [0.9, 0.95],
+            "tfidf__max_features": [5000, 10000],
+            "tfidf__binary": [True],
+            "clf__criterion": ["gini"],
+            "clf__max_depth": [10, 20, 30],
+            "clf__min_samples_split": [5],
+            "clf__min_samples_leaf": [5, 10, 20],
+            "clf__min_impurity_decrease": [0.0, 1e-4],
+            "clf__ccp_alpha": [0.0, 1e-4, 2e-4, 5e-4, 1e-3, 2e-3],
+            "clf__class_weight": [None, "balanced"],
+        },
+    ]
+
+    def count_grid(g: Dict[str, List[Any]]) -> int:
+        n = 1
+        for v in g.values():
+            n *= len(v)
+        return n
+    grid_size_est = sum(count_grid(g) for g in param_grid)
 
     skf = StratifiedKFold(n_splits=args.cv_splits, shuffle=True, random_state=args.seed)
     grid = GridSearchCV(
@@ -180,6 +186,7 @@ def main():
     best_params = grid.best_params_
     best_cv = float(grid.best_score_)
 
+    # Test & save
     y_pred = best_pipe.predict(X_test)
     save_confusion_matrix(y_test, y_pred, out_dir)
     metrics = save_metrics_summary(y_test, y_pred, out_dir)
@@ -195,9 +202,11 @@ def main():
             "best_cv_f1_macro": round(best_cv, 6),
             "preset": args.preset,
             "ngrams": ngrams,
-            "mode": mode,
+            "mode": "std",
             "seed": args.seed,
             "cv_splits": args.cv_splits,
+            "grid_size_est": grid_size_est,
+            "fits_evaluated_est": grid_size_est * args.cv_splits,
             "train_time_sec": round(train_time, 3),
             "data_root": str(Path("op_spam_v1.4").resolve()),
             "polarity": "negative_only",
@@ -208,13 +217,15 @@ def main():
         "model": "DecisionTree",
         "preset": args.preset,
         "ngrams": ngrams,
-        "mode": mode,
+        "mode": "std",
         "cv_f1_macro": round(best_cv, 6),
         "test_accuracy": round(metrics["accuracy"], 6),
         "test_precision_macro": round(metrics["precision_macro"], 6),
         "test_recall_macro": round(metrics["recall_macro"], 6),
         "test_f1_macro": round(metrics["f1_macro"], 6),
         "best_params": json.dumps(best_params),
+        "grid_size_est": grid_size_est,
+        "fits_evaluated_est": grid_size_est * args.cv_splits,
         "train_time_sec": round(train_time, 3),
         "out_dir": str(out_dir.resolve()),
         "timestamp": datetime.now().isoformat(timespec="seconds"),
@@ -222,12 +233,14 @@ def main():
         "label_mapping": "truthful=0, deceptive=1"
     }]).to_csv(out_dir / "run_summary.csv", index=False)
 
-    print("\n=== Training complete (NEGATIVE only; truthful=0, deceptive=1) ===")
+    print("\n=== Training complete (std-only; NEGATIVE only; truthful=0, deceptive=1) ===")
     print(json.dumps({
         "preset": args.preset,
         "best_params": best_params,
         "best_cv_f1_macro": round(best_cv, 6),
         "test_metrics": metrics,
+        "grid_size_est": grid_size_est,
+        "fits_evaluated_est": grid_size_est * args.cv_splits,
         "out_dir": str(out_dir.resolve())
     }, indent=2))
 
