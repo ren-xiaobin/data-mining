@@ -240,24 +240,37 @@ def train_and_eval(args):
         out_dir / "confusion_matrix.csv", encoding="utf-8"
     )
 
-    # ----- top features by RF importance AFTER selection -----
+    # ----- top terms per class (two columns like: top_deceptive_terms, top_truthful_terms) -----
     vec: CountVectorizer = best.named_steps["vec"]
     sel: SelectPercentile = best.named_steps["sel"]
-    rf: RandomForestClassifier = best.named_steps["rf"]
 
     feature_names = np.array(vec.get_feature_names_out())
-    kept_idx = sel.get_support(indices=True)
-    kept_names = feature_names[kept_idx]
+    kept_names = feature_names[sel.get_support(indices=True)]
 
-    importances = rf.feature_importances_
-    order = np.argsort(importances)[::-1]
-    top_k = min(30, len(importances))
+    Xtr_vec = vec.transform(X_tr)
+    Xtr_sel = sel.transform(Xtr_vec)  # (n_train, n_kept)
+    Xtr_bin = (Xtr_sel > 0).astype(int)
+
+    idx_tru = np.where(y_tr == 0)[0]
+    idx_dec = np.where(y_tr == 1)[0]
+    p_truth = np.asarray(Xtr_bin[idx_tru].mean(axis=0)).ravel()
+    p_decep = np.asarray(Xtr_bin[idx_dec].mean(axis=0)).ravel()
+
+    dec_rank = np.argsort(-(p_decep - p_truth))
+    tru_rank = np.argsort(-(p_truth - p_decep))
+
+    top_k = 30
+    dec_terms = kept_names[dec_rank][:top_k]
+    tru_terms = kept_names[tru_rank][:top_k]
+
+    L = max(len(dec_terms), len(tru_terms))
+    dec_terms = list(dec_terms) + [""] * (L - len(dec_terms))
+    tru_terms = list(tru_terms) + [""] * (L - len(tru_terms))
     pd.DataFrame(
-        {"feature": kept_names[order][:top_k], "importance": importances[order][:top_k]}
+        {"top_deceptive_terms": dec_terms, "top_truthful_terms": tru_terms}
     ).to_csv(out_dir / "top_features.csv", index=False, encoding="utf-8")
 
     print(f"[OK] Files saved to: {out_dir.resolve()}")
-
 
 # ----------------------------------- CLI ----------------------------------- #
 def main():
