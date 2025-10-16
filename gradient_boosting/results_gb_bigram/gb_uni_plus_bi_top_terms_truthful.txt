@@ -1,0 +1,50 @@
+location	imp=0.026862	delta=0.189652	score=0.005094
+walk	imp=0.008674	delta=0.437690	score=0.003796
+conference	imp=0.005898	delta=0.447741	score=0.002641
+millennium	imp=0.005986	delta=0.434450	score=0.002601
+open	imp=0.007896	delta=0.306978	score=0.002424
+east hotel	imp=0.004325	delta=0.447741	score=0.001937
+talbott hotel	imp=0.004316	delta=0.447741	score=0.001932
+parking valet	imp=0.004187	delta=0.447741	score=0.001875
+are	imp=0.011538	delta=0.155831	score=0.001798
+we	imp=0.015393	delta=0.111486	score=0.001716
+arrive	imp=0.005073	delta=0.302464	score=0.001534
+coffee	imp=0.004679	delta=0.316527	score=0.001481
+is	imp=0.014600	delta=0.099891	score=0.001458
+this is	imp=0.007701	delta=0.185680	score=0.001430
+east	imp=0.002949	delta=0.447741	score=0.001321
+mine	imp=0.002864	delta=0.447248	score=0.001281
+suites	imp=0.002921	delta=0.385693	score=0.001126
+ambassador	imp=0.002559	delta=0.427953	score=0.001095
+elevators	imp=0.004982	delta=0.207613	score=0.001034
+have stayed	imp=0.005235	delta=0.193539	score=0.001013
+there are	imp=0.010793	delta=0.092809	score=0.001002
+the heating	imp=0.002428	delta=0.397078	score=0.000964
+comfortable	imp=0.004147	delta=0.215536	score=0.000894
+concierge the	imp=0.001954	delta=0.447741	score=0.000875
+homewood suites	imp=0.001892	delta=0.447741	score=0.000847
+condescending and	imp=0.001812	delta=0.447741	score=0.000811
+arrived to	imp=0.002010	delta=0.397606	score=0.000799
+hour and	imp=0.001652	delta=0.447741	score=0.000740
+grease	imp=0.001622	delta=0.447741	score=0.000726
+michigan	imp=0.003660	delta=0.189966	score=0.000695
+policy	imp=0.001546	delta=0.447741	score=0.000692
+my friend	imp=0.001520	delta=0.447741	score=0.000681
+queens	imp=0.001484	delta=0.437196	score=0.000649
+email	imp=0.001678	delta=0.379939	score=0.000637
+lets just	imp=0.001352	delta=0.447741	score=0.000605
+no	imp=0.006533	delta=0.091737	score=0.000599
+the street	imp=0.001760	delta=0.339239	score=0.000597
+for	imp=0.013939	delta=0.040786	score=0.000569
+of noise	imp=0.001214	delta=0.447741	score=0.000543
+really looking	imp=0.001205	delta=0.447741	score=0.000540
+sit	imp=0.001818	delta=0.292722	score=0.000532
+we have	imp=0.002358	delta=0.225305	score=0.000531
+reviews	imp=0.002433	delta=0.211440	score=0.000514
+internet is	imp=0.001131	delta=0.447741	score=0.000506
+tiny	imp=0.001472	delta=0.325539	score=0.000479
+told	imp=0.002993	delta=0.159330	score=0.000477
+river	imp=0.001773	delta=0.261183	score=0.000463
+guests and	imp=0.001285	delta=0.353682	score=0.000455
+to drive	imp=0.000992	delta=0.447741	score=0.000444
+small	imp=0.002180	delta=0.199022	score=0.000434
