@@ -9,3 +9,37 @@ README 文件最后再写怎么运行代码
 op_spam_v1.4 是数据集
 
 记得修改代码里面的路径，让代码能够找到数据集，成功跑起来
+
+### Single Classification Trees (CART)
+
+Requirements:
+- Python ≥ 3.8
+- numpy ≥ 1.20
+- pandas ≥ 1.3
+- scikit-learn ≥ 1.1
+
+Show help:
+```bash
+$ python single_classification_trees/train_model_tree.py -h
+```
+
+Usage:
+```bash
+$ python single_classification_trees/train_model_tree.py \
+    --preset <uni_std|bi_std> \
+```
+After a run, results are written to:
+- single_classification_trees/results_uni_std/ (for --preset uni_std)
+- single_classification_trees/results_bi_std/ (for --preset bi_std)
+
+Each resulte folder contains:
+1. best_params.json: best CV config + metadata
+2. dt_params.csv: best parameters as two columns param,value
+3. metrics.csv: accuracy, macro precision/recall/F1.
+4. metrics_full.csv: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg)
+5. confusion_matrix.csv: matrix indexed by true_0,true_1, columns pred_0,pred_1
+6. predictions_fold5.csv: test predictions
+7. top_features.csv: Top terms
+8. run_summary.csv: one-row summary (CV macro-F1, test metrics, best params JSON, grid size, train time, output dir).
+
+    
