@@ -26,7 +26,7 @@ After a run, results are written to:
 - single_classification_trees/results_uni_std/ (for --preset uni_std)
 - single_classification_trees/results_bi_std/ (for --preset bi_std)
 
-Each resulte folder contains:
+Each results folder contains:
 1. best_params.json: best CV config + metadata
 2. dt_params.csv: best parameters as two columns param,value
 3. metrics.csv: accuracy, macro precision/recall/F1.
@@ -48,7 +48,7 @@ After a run, results are written to:
 - random_forests/results_uni_std/ (for --preset uni_std)
 - random_forests/results_bi_std/ (for --preset bi_std)
 
-Each resulte folder contains:
+Each results folder contains:
 1. rf_params.csv: best parameters as two columns param,value
 2. metrics.csv: accuracy, macro precision/recall/F1.
 3. metrics_full.csv: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg)
