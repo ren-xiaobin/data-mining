@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Iterable, Tuple, Dict, Any, List
 from datetime import datetime
 import time
-
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -16,7 +15,7 @@ from sklearn.metrics import (
     classification_report, confusion_matrix
 )
 
-# ----------------------------- Data processing ----------------------------- #
+# Data processing
 def _iter_txt_files_negative(root: Path) -> Iterable[Tuple[str, str, int, str]]:
     label_dirs = [
         ("truthful_from_Web", "truthful"),
@@ -54,7 +53,7 @@ def load_opspam_negative_only() -> pd.DataFrame:
     df = df.sort_values(["fold", "label", "path"]).reset_index(drop=True)
     return df
 
-# ----------------------------- Save ----------------------------- #
+# Save
 def save_confusion_matrix(y_true: np.ndarray, y_pred: np.ndarray, out_dir: Path):
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
     cm_df = pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"])
@@ -98,7 +97,6 @@ def save_params_csv(best_params: Dict[str, Any], out_dir: Path):
     rows = [{"param": k, "value": fmt(v)} for k, v in sorted(best_params.items())]
     pd.DataFrame(rows).to_csv(out_dir / "dt_params.csv", index=False)
 
-# ----------------------------- Main ----------------------------- #
 def main():
     parser = argparse.ArgumentParser(description="Single Classification Tree (NEGATIVE only, RF-style, std-only).")
     parser.add_argument("--preset", type=str, required=True,
@@ -192,7 +190,7 @@ def main():
     metrics = save_metrics_summary(y_test, y_pred, out_dir)
     save_metrics_full(y_test, y_pred, out_dir)
     save_predictions(y_test, y_pred, out_dir)
-    # ----- top terms per class (two-column CSV like: top_deceptive_terms, top_truthful_terms) -----
+    # top terms per class (two-column CSV like: top_deceptive_terms, top_truthful_terms)
     tfidf: TfidfVectorizer = best_pipe.named_steps["tfidf"]
     terms = np.array(tfidf.get_feature_names_out())
 

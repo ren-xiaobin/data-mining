@@ -1,14 +1,3 @@
-"""
---------------------------------------------------------------
-How to run (choose ONE of the four presets)
---------------------------------------------------------------
-# Unigram (standard)
-python random_forests/train_model_forest.py --preset uni_std
-
-# Bigram (standard)
-python random_forests/train_model_forest.py --preset bi_std
-"""
-
 from __future__ import annotations
 import argparse
 import re
@@ -23,7 +12,7 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 
 
-# ----------------------------- Data processing ----------------------------- #
+# Data processing
 def _read_text(p: Path) -> str:
     for enc in ("utf-8", "latin-1"):
         try:
@@ -46,11 +35,6 @@ def _collect_from_class_dir(folder: Path, label: int):
 
 
 def _find_class_dirs(neg_root: Path) -> tuple[Path, Path]:
-    """
-    Auto-detect class folders under negative_polarity:
-      - deceptive_from_*  -> label 1
-      - truthful_from_*   -> label 0
-    """
     if not neg_root.exists():
         raise FileNotFoundError(f"negative_polarity not found: {neg_root}")
 
@@ -86,7 +70,7 @@ def load_negative(data_root: Path):
     return X[tr_idx], y[tr_idx], X[te_idx], y[te_idx]
 
 
-# ------------------------------- Training ------------------------------- #
+# Training
 def train_and_eval(args):
     project_root = Path(__file__).resolve().parents[1]
     data_root = Path(args.data_root) if args.data_root else (project_root / "op_spam_v1.4" / "negative_polarity")
@@ -150,7 +134,6 @@ def train_and_eval(args):
         out_dir / "predictions_fold5.csv", index=False, encoding="utf-8"
     )
 
-    # ----- metrics.csv (two columns: metric,value; weighted averages) -----
     acc = metrics.accuracy_score(y_te, y_pred)
     prec = metrics.precision_score(y_te, y_pred, average="weighted", zero_division=0)
     rec = metrics.recall_score(y_te, y_pred, average="weighted", zero_division=0)
@@ -161,7 +144,6 @@ def train_and_eval(args):
         columns=["metric", "value"],
     ).to_csv(out_dir / "metrics.csv", index=False, encoding="utf-8")
 
-    # ----- RF hyperparameters for the report (number of trees + mtry) -----
     rf: RandomForestClassifier = best.named_steps["rf"]
     sel: SelectPercentile = best.named_steps["sel"]
 
@@ -205,7 +187,7 @@ def train_and_eval(args):
     print(f"[RF] n_trees={rf.n_estimators} | max_features_rule={rf.max_features} "
           f"| n_features_after_selection={n_feat} | mtry_count={mtry} | select_percentile={sel_percentile}")
 
-    # ----- metrics_full.csv -----
+    # metrics_full.csv
     rep = metrics.classification_report(
         y_te,
         y_pred,
@@ -234,13 +216,13 @@ def train_and_eval(args):
     df_full["support"] = df_full["support"].astype("string")
     df_full.to_csv(out_dir / "metrics_full.csv", index=False, encoding="utf-8")
 
-    # ----- confusion matrix -----
+    # confusion matrix
     cm = metrics.confusion_matrix(y_te, y_pred, labels=[0, 1])
     pd.DataFrame(cm, index=["true_0", "true_1"], columns=["pred_0", "pred_1"]).to_csv(
         out_dir / "confusion_matrix.csv", encoding="utf-8"
     )
 
-    # ----- top terms per class (two columns like: top_deceptive_terms, top_truthful_terms) -----
+    # top terms per class (two columns like: top_deceptive_terms, top_truthful_terms)
     vec: CountVectorizer = best.named_steps["vec"]
     sel: SelectPercentile = best.named_steps["sel"]
 
@@ -272,7 +254,7 @@ def train_and_eval(args):
 
     print(f"[OK] Files saved to: {out_dir.resolve()}")
 
-# ----------------------------------- CLI ----------------------------------- #
+# CLI
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
