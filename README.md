@@ -66,20 +66,16 @@ $ python gradient_boosting/gradient_boosting_fixed.py \
 ```
 
 
-Data:
-op_spam_v1.4.zip
+Note:
+op_spam_v1.4.zip must be in the same directory as gradient_boosting_fixed.py
 
-Features:
-UNI = unigrams; UNI+BI = unigrams+bigrams; χ² selection; dense before GB.
 
-Fixed params (from CV):
 
-UNI: k=4000, n_estimators=800, max_depth=2, lr=0.05, subsample=0.7, max_features=0.7, random_state=0
-
-UNI+BI: k=all, n_estimators=800, max_depth=3, lr=0.05, subsample=0.7, max_features=0.7, random_state=0
-
-Outputs:
-gb_uni.pkl, gb_uni_plus_bi.pkl
-gb_*_metrics.json, gb_*_metrics_full.json
-gb_*_confusion.csv, gb_*_predictions.csv
-gb_*_top_terms_deceptive.txt, gb_*_top_terms_truthful.txt
+After a run, results are written to the same directory as gradient_boosting_fixed.py:
+1. gb_uni.pkl, gb_uni_plus_bi.pkl: trained pipelines
+2. gb_*_metrics.json: accuracy, macro-F1, per-class precision/recall/F1
+3. gb_*_metrics_full.json: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg)
+4. gb_*_confusion.csv: confusion matrix (rows: true_truthful,true_deceptive; cols: pred_truthful,pred_deceptive)
+5. gb_*_predictions.csv: fold-5 predictions with y_true, y_pred, p_deceptive
+6. gb_*_top_terms_deceptive.txt: top deceptive-leaning features (term, impurity importance)
+7. gb_*_top_terms_truthful.txt: top truthful-leaning features (term, impurity importance).
