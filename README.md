@@ -10,7 +10,7 @@ op_spam_v1.4 是数据集
 
 记得修改代码里面的路径，让代码能够找到数据集，成功跑起来
 
-### Single Classification Trees (CART)
+### Single Classification Trees 
 
 Requirements:
 - Python ≥ 3.8
