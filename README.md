@@ -3,19 +3,19 @@
 The project is organized into the following folders:
 
 - `naive_bayes/`: Contains scripts for training and evaluating Multinomial Naive Bayes models.
-- `logistic_regression/`: Contains scripts for training and evaluating Logistic Regression models, including a TF-IDF version.
+- `logistic_regression/`: Contains scripts for training and evaluating Logistic Regression models, also including an additional TF-IDF version.
 - `single_classification_trees/`: Contains scripts for training and evaluating Single Classification Trees.
 - `random_forests/`: Contains scripts for training and evaluating Random Forest models.
 - `gradient_boosting/`: Contains scripts for training and evaluating Gradient Boosting models.
 - `significance_test/`: Contains a script for performing significance tests on the results of different classifiers.
-- `op_spam_v1.4/` The dataset used in whole experiment.
+- `op_spam_v1.4/` The dataset used in the whole experiment.
 
 The only dependency required is [scikit-learn](https://scikit-learn.org/stable/), and all code is implemented using Python 3.10.15.
 
 
 ## Multinomial Naive Bayes
 
-The unigram version is implemented in `naive_bayes_unigram.py`, and the bigram version in `naive_bayes_bigram.py`.
+The unigram version is implemented in `naive_bayes/naive_bayes_unigram.py`, and the bigram version in `naive_bayes/naive_bayes_bigram.py`.
 To run the unigram model, simply execute:
 
 ```bash
@@ -30,7 +30,7 @@ Similarly, running `naive_bayes_bigram.py` will store all results in the `result
 Each result folder contains the confusion matrix, a simplified metrics report, a full metrics report, the prediction pairs used for statistical significance testing, and the top indicative terms.
 
 ## Logistic regression
-The unigram version is implemented in `logistic_regression_unigram.py`, and the bigram version in `logistic_regression_bigram.py`.
+The unigram version is implemented in `logistic_regression/logistic_regression_unigram.py`, and the bigram version in `logistic_regression/logistic_regression_bigram.py`.
 To run the unigram model, simply execute:
 ```bash
 $ cd logistic_regression/
@@ -83,7 +83,7 @@ The command line parameter are same as above. After a run, results are written t
 - `random_forests/results_bi_std/` (for --preset bi_std)
 
 Each results folder contains:
-1. `rf_params.csv`: fitted hyperparameters 
+1. `rf_params.csv`: fitted hyperparameters.
 2. `metrics.csv`: accuracy, macro precision/recall/F1.
 3. `metrics_full.csv`: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg).
 4. `confusion_matrix.csv`: matrix indexed by rows `true_0`,`true_1`, columns `pred_0`, `pred_1`.
@@ -105,6 +105,6 @@ After a run, results are written to the same directory as `gradient_boosting_fix
 2. `gb_*_metrics.json`: accuracy, macro-F1, per-class precision/recall/F1.
 3. `gb_*_metrics_full.json`: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg).
 4. `gb_*_confusion.csv`: confusion matrix (rows: `true_truthful`, `true_deceptive`; cols: `pred_truthful`, `pred_deceptive`).
-5. `gb_*_predictions.csv`: fold-5 predictions with `y_true`, `y_pred`, `p_deceptive`.
-6. `gb_*_top_terms_deceptive.txt`: top deceptive-leaning features (term, impurity importance).
-7. `gb_*_top_terms_truthful.txt`: top truthful-leaning features (term, impurity importance).
+5. `gb_*_predictions.csv`: test fold predictions with `y_true`, `y_pred`, `p_deceptive`.
+6. `gb_*_top_terms_deceptive.txt`: top deceptive-leaning features (terms, impurity importance).
+7. `gb_*_top_terms_truthful.txt`: top truthful-leaning features (terms, impurity importance).
