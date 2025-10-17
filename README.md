@@ -10,13 +10,7 @@ op_spam_v1.4 是数据集
 
 记得修改代码里面的路径，让代码能够找到数据集，成功跑起来
 
-### Single Classification Trees 
-
-Requirements:
-- Python ≥ 3.8
-- numpy ≥ 1.20
-- pandas ≥ 1.3
-- scikit-learn ≥ 1.1
+### single_classification_trees
 
 Show help:
 ```bash
@@ -42,4 +36,22 @@ Each resulte folder contains:
 7. top_features.csv: top terms
 8. run_summary.csv: one-row summary (CV macro-F1, test metrics, best params JSON, grid size, train time, output dir).
 
-    
+### random_forests
+
+Usage:
+```bash
+$ python random_forests/train_model_forests.py \
+    --preset <uni_std|bi_std> \
+```
+
+After a run, results are written to:
+- random_forests/results_uni_std/ (for --preset uni_std)
+- random_forests/results_bi_std/ (for --preset bi_std)
+
+Each resulte folder contains:
+1. rf_params.csv: best parameters as two columns param,value
+2. metrics.csv: accuracy, macro precision/recall/F1.
+3. metrics_full.csv: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg)
+4. confusion_matrix.csv: matrix indexed by true_0,true_1, columns pred_0,pred_1
+5. predictions_fold5.csv: test predictions
+6. top_features.csv: top terms
