@@ -99,7 +99,7 @@ def save_run(tag, res, vec):
     pd.DataFrame({'y_true': y_test, 'y_pred': res['pred'], 'p_deceptive': res['proba']}).to_csv(
         f'gb_{tag}_predictions.csv', index=False)
 
-    # ---------- Directional top terms (truthful vs deceptive) ----------
+    # Directional top terms (truthful vs deceptive)
     sel = res['model'].named_steps['sel']
     gb  = res['model'].named_steps['gb']
     kept_idx = sel.get_support(indices=True)

@@ -1,6 +1,3 @@
-#export data, define model, run model, print results
-#run gradient boosting_fixed.py to save models and results to files
-
 import zipfile, re, pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 

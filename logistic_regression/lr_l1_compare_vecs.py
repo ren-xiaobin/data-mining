@@ -1,5 +1,4 @@
 # Four experiments: count-unigram, count-bigram, tfidf-unigram, tfidf-bigram
-# On folds 1–4 we use 5-fold CV to tune parameter, and evaluate on fold 5 data
 
 import os, glob
 from pathlib import Path

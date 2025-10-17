@@ -8,7 +8,7 @@ paths = {
     "LR_uni":  "../logistic_regression/results_lr_l1_unigram/predictions_fold5.csv",
     "LR_bi":   "../logistic_regression/results_lr_l1_bigram/predictions_fold5.csv", 
 
-    # Uncomment these two lines if you want to test TF-IDF for logistic regression
+    # Uncomment these two lines to test TF-IDF for logistic regression
     # "LR_uni_tf_idf": "../logistic_regression/results_lr_l1_compare/tfidf_unigram/predictions_fold5.csv",
     # "LR_bi_tf_idf": "../logistic_regression/results_lr_l1_compare/tfidf_bigram/predictions_fold5.csv",
 
