@@ -39,7 +39,7 @@ Each resulte folder contains:
 4. metrics_full.csv: full test report (per-class precision/recall/F1/support, accuracy, macro/weighted avg)
 5. confusion_matrix.csv: matrix indexed by true_0,true_1, columns pred_0,pred_1
 6. predictions_fold5.csv: test predictions
-7. top_features.csv: Top terms
+7. top_features.csv: top terms
 8. run_summary.csv: one-row summary (CV macro-F1, test metrics, best params JSON, grid size, train time, output dir).
 
     
