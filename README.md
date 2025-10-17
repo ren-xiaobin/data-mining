@@ -55,3 +55,31 @@ Each resulte folder contains:
 4. confusion_matrix.csv: matrix indexed by true_0,true_1, columns pred_0,pred_1
 5. predictions_fold5.csv: test predictions
 6. top_features.csv: top terms
+
+### gradient_boosting
+
+
+Usage:
+```bash
+$ python gradient_boosting/gradient_boosting_fixed.py \
+  
+```
+
+
+Data
+op_spam_v1.4.zip (negative_polarity). Folds 1–4 train, fold 5 test.
+
+Features
+UNI = unigrams; UNI+BI = unigrams+bigrams; χ² selection; dense before GB.
+
+Fixed params (from CV)
+
+UNI: k=4000, n_estimators=800, max_depth=2, lr=0.05, subsample=0.7, max_features=0.7, random_state=0
+
+UNI+BI: k=all, n_estimators=800, max_depth=3, lr=0.05, subsample=0.7, max_features=0.7, random_state=0
+
+Outputs (cwd)
+gb_uni.pkl, gb_uni_plus_bi.pkl
+gb_*_metrics.json, gb_*_metrics_full.json
+gb_*_confusion.csv, gb_*_predictions.csv
+gb_*_top_terms_deceptive.txt, gb_*_top_terms_truthful.txt
